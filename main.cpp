@@ -35,9 +35,17 @@ void test_argsort()
     std::cout << std::endl;
 }
 
+void test_isOneOf()
+{
+    std::cout << zw::isOneOf(1.0f, {2.0f, 0.0f}) << std::endl;
+    std::cout << zw::isOneOf('2', {'3', '2'}) << std::endl;
+    std::cout << zw::isOneOf("23", {"111", "23"}) << std::endl;
+}
+
 int main()
 {
     // test_split();
     test_getImageFile();
     // test_argsort();
+    // test_isOneOf();
 }

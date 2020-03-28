@@ -10,16 +10,25 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
-#include <experimental/filesystem>
 
 #ifdef _WIN32
 #include <io.h>
+#define access _access_s
 #else
 #include <dirent.h>
+#include <unistd.h>
 #endif
 
 namespace zw
 {
+/** @brief Check if a file exists
+
+
+*/
+bool fileExists(const std::string &Filename)
+{
+    return access(Filename.c_str(), 0) == 0;
+}
 /** @brief Clip {value} by bound ({low}, {high}).
 
 Note: The types of {low}, {high} and {value} must be same.
@@ -80,14 +89,21 @@ void split(const std::string &s, std::vector<std::string> &tokens, const char de
         pos = s.find_first_of(delim, lastPos);
     }
 }
-/** @brief Lambda: Determine if {k} is equal to any one of {args}
+/** @brief Determine if {k} is equal to any one of {args}
 
-Example 1, isOneOf("png", "jpg", "bmp")->false, because {k}->"png" is not
-equal to any one of {args}->["jpg", "bmp"].
-Example 2, isOneOf("png", "jpg", "bmp", "png")->true. {k}->"png", {args}->
-["jpg", "bmp", "png"].
+Example 1, isOneOf("png", {"jpg", "bmp"})->false.
+Example 2, isOneOf("png", {"jpg", "bmp", "png"})->true.
 */
-auto isOneOf = [](auto &&k, auto &&... args) -> bool { return ((args == k) || ...); };
+template <class T>
+bool isOneOf(T k, std::initializer_list<T> args)
+{
+    bool flag = false;
+    for (auto arg : args)
+    {
+        flag = arg == k || flag;
+    }
+    return flag;
+}
 /** @brief Determine if {fileName} is a image file.
 
 The {fileName} is just a file name like "dog.jpg" or "fish.jpg" instead of a path
@@ -96,18 +112,20 @@ available.
 */
 bool isImageFile(std::string fileName)
 {
+    // Lambda: cast {s} to std::string
+    auto str = [](auto &&s) -> std::string { return s; };
     std::string suffix = fileName.substr(fileName.find_last_of('.') + 1);
-    return isOneOf(suffix, "jpg", "jpeg", "bmp", "png", "tif", "tiff");
+    return isOneOf(suffix, {str("jpg"), str("jpeg"), str("bmp"), str("png"), str("tif"), str("tiff")});
 }
 /** @brief find absolute path {vFile} for all images in folder {path}, optinal
 recursive {subFolder}
 
 if {subFolder} is true, then this function will find images recursively, otherwise
-not. Need to add link flag -lstdc++fs.
+not.
 */
 void getImageFile(std::vector<std::string> &vFile, std::string path, bool subFolder)
 {
-    if (path.empty() || !std::experimental::filesystem::exists(path))
+    if (path.empty() || !fileExists(path))
     {
         printf("The path [%s] is not available\n", path.c_str());
         return;

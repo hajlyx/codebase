@@ -2,4 +2,4 @@
 
 A collection of several useful C++ functions.
 
-## C++ standard: 17 or above
+## C++ standard: 14 or above
