@@ -15,7 +15,11 @@ void test_getImageFile()
 {
     // func: getImageFile
     std::vector<std::string> vFile;
+#ifdef _WIN32
+	zw::getImageFile(vFile, "D:/myTemp/alldata/CardData", true);
+#else
     zw::getImageFile(vFile, "/home/zw/zwspace/alldata/goggles", true);
+#endif
     for (auto path : vFile)
     {
         std::cout << path << std::endl;
