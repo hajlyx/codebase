@@ -22,27 +22,25 @@
 namespace zw
 {
 /** @brief Check if a file exists
-
-
-*/
+ */
 bool fileExists(const std::string &Filename)
 {
     return access(Filename.c_str(), 0) == 0;
 }
 /** @brief Clip {value} by bound ({low}, {high}).
-
-Note: The types of {low}, {high} and {value} must be same.
-The type of return is also the same as {value}.
-*/
+ * 
+ * Note: The types of {low}, {high} and {value} must be same.
+ * The type of return is also the same as {value}.
+ */
 template <class T>
 T tClip(T value, T low, T high)
 {
     return std::min(std::max(value, low), high);
 }
 /** @brief Compare struct used in fuction argsort.
-
-The types of {a} and {b} are size_t, the sort order is low->high.
-*/
+ * 
+ * The types of {a} and {b} are size_t, the sort order is low->high.
+ */
 template <class T>
 struct index_cmp
 {
@@ -54,10 +52,10 @@ struct index_cmp
     const T arr;
 };
 /** @brief Get the order of the {vT} without change {vT}.
-
-The type of {vIndex} is std::vector<size_t>, if lowToHigh is true, than {vIndex}
-will be sorted as low->high, otherwise high->low.
-*/
+ * 
+ * The type of {vIndex} is std::vector<size_t>, if lowToHigh is true, than {vIndex}
+ * will be sorted as low->high, otherwise high->low.
+ */
 template <class T>
 void argsort(std::vector<T> &vT, std::vector<size_t> &vIndex, bool lowToHigh)
 {
@@ -74,10 +72,10 @@ void argsort(std::vector<T> &vT, std::vector<size_t> &vIndex, bool lowToHigh)
     }
 }
 /** @brief Split a string {s} to several {tokens} based on {delim}.
-
-Note: this function will skip empty token. For example, string "123.45..678" will
-be split to {123, 45, 678}.
-*/
+ * 
+ * Note: this function will skip empty token. For example, string "123.45..678" will
+ * be split to {123, 45, 678}.
+ */
 void split(const std::string &s, std::vector<std::string> &tokens, const char delim)
 {
     std::string::size_type lastPos = s.find_first_not_of(delim, 0);
@@ -90,10 +88,10 @@ void split(const std::string &s, std::vector<std::string> &tokens, const char de
     }
 }
 /** @brief Determine if {k} is equal to any one of {args}
-
-Example 1, isOneOf("png", {"jpg", "bmp"})->false.
-Example 2, isOneOf("png", {"jpg", "bmp", "png"})->true.
-*/
+ * 
+ * Example 1, isOneOf("png", {"jpg", "bmp"})->false.
+ * Example 2, isOneOf("png", {"jpg", "bmp", "png"})->true.
+ */
 template <class T>
 bool isOneOf(T k, std::initializer_list<T> args)
 {
@@ -105,11 +103,11 @@ bool isOneOf(T k, std::initializer_list<T> args)
     return flag;
 }
 /** @brief Determine if {fileName} is a image file.
-
-The {fileName} is just a file name like "dog.jpg" or "fish.jpg" instead of a path
-like "/tmp/animal/dog.jpg", so this function will not check if {fileName} is
-available.
-*/
+ * 
+ * The {fileName} is just a file name like "dog.jpg" or "fish.jpg" instead of a path
+ * like "/tmp/animal/dog.jpg", so this function will not check if {fileName} is
+ * available.
+ */
 bool isImageFile(std::string fileName)
 {
     // Lambda: cast {s} to std::string
@@ -118,11 +116,11 @@ bool isImageFile(std::string fileName)
     return isOneOf(suffix, {str("jpg"), str("jpeg"), str("bmp"), str("png"), str("tif"), str("tiff")});
 }
 /** @brief find absolute path {vFile} for all images in folder {path}, optinal
-recursive {subFolder}
-
-if {subFolder} is true, then this function will find images recursively, otherwise
-not.
-*/
+ * recursive {subFolder}
+ * 
+ * if {subFolder} is true, then this function will find images recursively, otherwise
+ * not.
+ */
 void getImageFile(std::vector<std::string> &vFile, std::string path, bool subFolder)
 {
     if (path.empty() || !fileExists(path))

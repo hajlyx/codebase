@@ -19,7 +19,7 @@ extern "C"
 namespace zw
 {
 /** @brief a base wrapper of darknet network
-*/
+ */
 class DarkModel
 {
 private:
